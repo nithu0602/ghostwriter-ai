@@ -18,9 +18,6 @@ interface GitHubCommitResponse {
   author?: {
     login: string;
   };
-  files?: Array<{
-    changes: number;
-  }>;
 }
 
 export async function getCommits(
@@ -39,16 +36,12 @@ export async function getCommits(
     );
 
     return response.map((commit) => {
-      // Count changed files
-      const changedFiles = commit.files?.length || 0;
-
       return {
         sha: commit.sha,
         message: commit.commit.message,
         authorLogin: commit.author?.login || null,
         authorName: commit.commit.author?.name || null,
         authorDate: commit.commit.author?.date || new Date().toISOString(),
-        changedFiles,
       };
     });
   } catch (error) {
@@ -64,7 +57,6 @@ export async function getCommits(
         authorLogin: commit.author?.login || null,
         authorName: commit.commit.author?.name || null,
         authorDate: commit.commit.author?.date || new Date().toISOString(),
-        changedFiles: commit.files?.length || 0,
       }));
     }
 

@@ -2,6 +2,26 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Environment variables
+
+Ghostwriter AI calls the GitHub REST API server-side from `app/api/analyze/route.ts`. Unauthenticated requests are limited to 60/hour per IP, so a `GITHUB_TOKEN` is strongly recommended for anything beyond local, occasional use.
+
+1. Copy `.env.example` to `.env.local`:
+   ```bash
+   cp .env.example .env.local
+   ```
+2. Generate a token at [github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new):
+   - Token type: **Fine-grained personal access token**
+   - Resource owner: your account (doesn't need to be the analyzed repo's owner)
+   - Repository access: **Public Repositories (read-only)** — no repository-specific permissions/scopes are required since Ghostwriter AI only reads public repository metadata, commits, contributors, and pull requests.
+3. Paste the token into `.env.local` as `GITHUB_TOKEN=...`.
+
+#### Setting the token on Vercel
+
+1. Open your project in the Vercel dashboard → **Settings → Environment Variables**.
+2. Add `GITHUB_TOKEN` with the token value, scoped to the environments you need (Production/Preview/Development).
+3. Redeploy so the new environment variable is picked up (Vercel does not hot-reload env vars into already-running deployments).
+
 First, run the development server:
 
 ```bash

@@ -22,6 +22,7 @@ import {
   InsufficientDataError,
   AnalysisServiceError,
 } from "./types";
+import { getCached, setCached } from "./cache";
 
 /**
  * Validates GitHub repository data
@@ -146,6 +147,14 @@ export function analyzeRepository(data: GitHubRepositoryData): RepositoryAnalysi
 
     // Combine all results into unified analysis
     const result: RepositoryAnalysis = {
+      repository: {
+        language: data.repository.language,
+        stars: data.repository.stars,
+        forks: data.repository.forks,
+        openIssues: data.repository.openIssues,
+        updatedAt: data.repository.updatedAt,
+        visibility: data.repository.visibility,
+      },
       contributors,
       ownership,
       busFactor,
@@ -183,6 +192,12 @@ export async function analyzeRepositoryByName(
   owner: string,
   repo: string
 ): Promise<RepositoryAnalysis> {
+  const cacheKey = `${owner.toLowerCase()}/${repo.toLowerCase()}`;
+  const cached = getCached<RepositoryAnalysis>(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   try {
     // Import GitHub API functions here to avoid circular dependencies
     const {
@@ -211,7 +226,9 @@ export async function analyzeRepositoryByName(
     };
 
     // Analyze the repository data
-    return analyzeRepository(data);
+    const result = analyzeRepository(data);
+    setCached(cacheKey, result);
+    return result;
   } catch (error) {
     if (error instanceof AnalysisServiceError) {
       throw error;

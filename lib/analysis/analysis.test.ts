@@ -43,7 +43,6 @@ describe("Analysis Functions", () => {
           authorLogin: "alice",
           authorName: "Alice Developer",
           authorDate: "2024-01-01T00:00:00Z",
-          changedFiles: 3,
         },
       ];
 
@@ -77,7 +76,6 @@ describe("Analysis Functions", () => {
           authorLogin: "alice",
           authorName: "Alice",
           authorDate: "2024-01-01T00:00:00Z",
-          changedFiles: 1,
         },
         {
           sha: "2",
@@ -85,7 +83,6 @@ describe("Analysis Functions", () => {
           authorLogin: "alice",
           authorName: "Alice",
           authorDate: "2024-01-02T00:00:00Z",
-          changedFiles: 1,
         },
         {
           sha: "3",
@@ -93,7 +90,6 @@ describe("Analysis Functions", () => {
           authorLogin: "bob",
           authorName: "Bob",
           authorDate: "2024-01-03T00:00:00Z",
-          changedFiles: 1,
         },
         {
           sha: "4",
@@ -101,7 +97,6 @@ describe("Analysis Functions", () => {
           authorLogin: "bob",
           authorName: "Bob",
           authorDate: "2024-01-04T00:00:00Z",
-          changedFiles: 1,
         },
       ];
 
@@ -125,7 +120,6 @@ describe("Analysis Functions", () => {
           authorLogin: "alice",
           authorName: "Alice",
           authorDate: "2024-01-01T00:00:00Z",
-          changedFiles: 1,
         },
       ];
 

@@ -68,6 +68,7 @@ const mockAnalyzeRepositoryByName = require("@/lib/service").analyzeRepositoryBy
 describe("POST /api/analyze", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    require("@/lib/service/rateLimit").__resetRateLimitForTests();
   });
 
   // Helper to create a mock request
@@ -170,6 +171,14 @@ describe("POST /api/analyze", () => {
 
   describe("Successful Analysis", () => {
     const mockAnalysisResult = {
+      repository: {
+        language: "TypeScript",
+        stars: 1234,
+        forks: 56,
+        openIssues: 7,
+        updatedAt: "2024-01-02T00:00:00Z",
+        visibility: "Public" as const,
+      },
       contributors: {
         topContributors: [
           {

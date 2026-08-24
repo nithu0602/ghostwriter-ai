@@ -110,9 +110,23 @@ export interface EngineeringHealthResult {
 }
 
 /**
+ * Repository metadata surfaced to consumers of RepositoryAnalysis
+ * Subset of RepositoryMetadata needed for display purposes
+ */
+export interface RepositoryAnalysisMetadata {
+  language: string | null;
+  stars: number;
+  forks: number;
+  openIssues: number;
+  updatedAt: string;
+  visibility: "Public" | "Private";
+}
+
+/**
  * Complete repository analysis
  */
 export interface RepositoryAnalysis {
+  repository: RepositoryAnalysisMetadata;
   contributors: ContributorAnalysisResult;
   ownership: OwnershipAnalysisResult;
   busFactor: BusFactorResult;

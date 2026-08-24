@@ -28,6 +28,7 @@ describe("Repository Analyzer Service", () => {
     openIssues: 5,
     createdAt: "2024-01-01T00:00:00Z",
     updatedAt: "2024-02-01T00:00:00Z",
+    visibility: "Public",
   };
 
   const mockContributors: GitHubContributor[] = [
@@ -52,7 +53,6 @@ describe("Repository Analyzer Service", () => {
       authorLogin: "alice",
       authorName: "Alice",
       authorDate: "2024-01-01T00:00:00Z",
-      changedFiles: 5,
     },
     {
       sha: "def456",
@@ -60,7 +60,6 @@ describe("Repository Analyzer Service", () => {
       authorLogin: "bob",
       authorName: "Bob",
       authorDate: "2024-01-02T00:00:00Z",
-      changedFiles: 3,
     },
   ];
 
@@ -189,6 +188,14 @@ describe("Repository Analyzer Service", () => {
       expect(result.collaboration).toBeDefined();
       expect(result.engineeringHealth).toBeDefined();
       expect(result.analyzedAt).toBeDefined();
+      expect(result.repository).toEqual({
+        language: "TypeScript",
+        stars: 100,
+        forks: 10,
+        openIssues: 5,
+        updatedAt: "2024-02-01T00:00:00Z",
+        visibility: "Public",
+      });
     });
 
     it("should throw ValidationError on invalid data", () => {

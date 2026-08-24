@@ -15,6 +15,7 @@ export interface RepositoryMetadata {
   openIssues: number;
   createdAt: string;
   updatedAt: string;
+  visibility: "Public" | "Private";
 }
 
 export interface GitHubContributor {
@@ -30,7 +31,6 @@ export interface GitHubCommit {
   authorLogin: string | null;
   authorName: string | null;
   authorDate: string;
-  changedFiles?: number;
 }
 
 export interface GitHubPullRequest {

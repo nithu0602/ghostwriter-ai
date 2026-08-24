@@ -7,6 +7,7 @@ import {
 } from "@/lib/service";
 import { parseGitHubUrl } from "@/lib/github";
 import { GitHubRateLimitError, GitHubNotFoundError, GitHubError } from "@/lib/github/types";
+import { checkRateLimit, getClientIp } from "@/lib/service/rateLimit";
 
 interface AnalysisResponse {
   repository: string;
@@ -149,6 +150,25 @@ function inferRole(contributor: any): string {
 export async function POST(request: Request) {
   const startTime = performance.now();
 
+  // Basic abuse protection: IP-based sliding window rate limit.
+  // This is a public, unauthenticated endpoint that triggers several
+  // outbound GitHub API calls per hit, so we cap how often a single
+  // client can invoke it to protect the shared GITHUB_TOKEN's rate limit.
+  const clientIp = getClientIp(request);
+  const rateLimit = checkRateLimit(clientIp);
+
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again shortly." },
+      {
+        status: 429,
+        headers: rateLimit.retryAfterSeconds
+          ? { "Retry-After": String(rateLimit.retryAfterSeconds) }
+          : undefined,
+      }
+    );
+  }
+
   try {
     const body = await request.json();
     const repository = body?.repository;
@@ -213,12 +233,12 @@ export async function POST(request: Request) {
       busFactor: analysis.busFactor.busFactor,
       analysisTime,
       confidence,
-      language: "TypeScript",
-      stars: 1000,
-      forks: 100,
-      openIssues: 50,
-      lastCommit: "2 days ago",
-      visibility: "Public",
+      language: analysis.repository.language,
+      stars: analysis.repository.stars,
+      forks: analysis.repository.forks,
+      openIssues: analysis.repository.openIssues,
+      lastCommit: formatLastCommitDate(analysis.repository.updatedAt),
+      visibility: analysis.repository.visibility,
       topContributors,
       risks: generateRisks(analysis),
       insights: generateInsights(analysis),

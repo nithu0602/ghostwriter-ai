@@ -19,6 +19,7 @@ interface GitHubRepoResponse {
   open_issues_count: number;
   created_at: string;
   updated_at: string;
+  private: boolean;
 }
 
 export async function getRepository(
@@ -41,5 +42,6 @@ export async function getRepository(
     openIssues: response.open_issues_count,
     createdAt: response.created_at,
     updatedAt: response.updated_at,
+    visibility: response.private ? "Private" : "Public",
   };
 }
