@@ -337,11 +337,27 @@ describe("Repository Analyzer Service", () => {
           contributions: 100,
         },
       ];
+      const singleContributorCommits: GitHubCommit[] = [
+        {
+          sha: "1",
+          message: "Initial commit",
+          authorLogin: "alice",
+          authorName: "Alice",
+          authorDate: "2024-01-01T00:00:00Z",
+        },
+        {
+          sha: "2",
+          message: "Feature work",
+          authorLogin: "alice",
+          authorName: "Alice",
+          authorDate: "2024-01-02T00:00:00Z",
+        },
+      ];
 
       const data: GitHubRepositoryData = {
         repository: mockRepository,
         contributors: singleContributor,
-        commits: mockCommits,
+        commits: singleContributorCommits,
         pullRequests: [],
       };
 
@@ -358,17 +374,19 @@ describe("Repository Analyzer Service", () => {
         (_, i) => ({
           sha: `${i}`,
           message: `Commit ${i}`,
-          authorLogin: ["a", "b", "c", "d"][i % 4],
-          authorName: ["a", "b", "c", "d"][i % 4],
+          authorLogin: ["a", "b", "c", "d", "e", "f"][i % 6],
+          authorName: ["a", "b", "c", "d", "e", "f"][i % 6],
           authorDate: `2024-01-${String((i % 28) + 1).padStart(2, "0")}T00:00:00Z`,
         })
       );
 
       const balancedContributors: GitHubContributor[] = [
-        { login: "a", name: "A", avatarUrl: "url1", contributions: 3 },
-        { login: "b", name: "B", avatarUrl: "url2", contributions: 3 },
-        { login: "c", name: "C", avatarUrl: "url3", contributions: 3 },
-        { login: "d", name: "D", avatarUrl: "url4", contributions: 3 },
+        { login: "a", name: "A", avatarUrl: "url1", contributions: 2 },
+        { login: "b", name: "B", avatarUrl: "url2", contributions: 2 },
+        { login: "c", name: "C", avatarUrl: "url3", contributions: 2 },
+        { login: "d", name: "D", avatarUrl: "url4", contributions: 2 },
+        { login: "e", name: "E", avatarUrl: "url5", contributions: 2 },
+        { login: "f", name: "F", avatarUrl: "url6", contributions: 2 },
       ];
 
       const data: GitHubRepositoryData = {

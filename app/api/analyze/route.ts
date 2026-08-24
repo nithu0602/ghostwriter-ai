@@ -63,9 +63,9 @@ function formatLastCommitDate(isoDate: string): string {
 /**
  * Generate deterministic insights from analysis results
  */
-function generateInsights(analysis: any): string[] {
+function generateInsights(analysis: any, repositoryName: string): string[] {
   const insights: string[] = [];
-  const repo = analysis.contributors.topContributors[0]?.login || "Repository";
+  const repo = repositoryName || "Repository";
 
   // Add insight about health score
   if (analysis.engineeringHealth.healthScore > 75) {
@@ -241,7 +241,7 @@ export async function POST(request: Request) {
       visibility: analysis.repository.visibility,
       topContributors,
       risks: generateRisks(analysis),
-      insights: generateInsights(analysis),
+      insights: generateInsights(analysis, `${owner}/${repo}`),
       summary: `Ghostwriter AI analyzed ${owner}/${repo} and detected ${
         analysis.engineeringHealth.healthScore > 75
           ? "healthy collaboration overall"

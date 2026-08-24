@@ -271,9 +271,9 @@ describe("POST /api/analyze", () => {
       expect(body.busFactor).toBeDefined();
       expect(body.analysisTime).toBeDefined();
       expect(body.confidence).toBeDefined();
-      expect(body.topContributors).toBeInstanceOf(Array);
-      expect(body.risks).toBeInstanceOf(Array);
-      expect(body.insights).toBeInstanceOf(Array);
+      expect(Array.isArray(body.topContributors)).toBe(true);
+      expect(Array.isArray(body.risks)).toBe(true);
+      expect(Array.isArray(body.insights)).toBe(true);
       expect(body.summary).toBeDefined();
     });
 
@@ -314,7 +314,7 @@ describe("POST /api/analyze", () => {
       const response = await POST(request);
       const body = await response.json();
 
-      expect(body.risks).toBeInstanceOf(Array);
+      expect(Array.isArray(body.risks)).toBe(true);
       expect(body.risks.length).toBeGreaterThan(0);
       // Risks should be from engineeringHealth.riskAreas or generated
       expect(body.risks[0]).not.toMatch(/Math.random|fake|mock/i);
@@ -327,7 +327,7 @@ describe("POST /api/analyze", () => {
       const response = await POST(request);
       const body = await response.json();
 
-      expect(body.insights).toBeInstanceOf(Array);
+      expect(Array.isArray(body.insights)).toBe(true);
       expect(body.insights.length).toBeGreaterThan(0);
       // Insights should be based on actual analysis data
       expect(body.insights[0]).toContain("owner/repo");

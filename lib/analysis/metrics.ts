@@ -70,11 +70,13 @@ export function calculateBusFactor(
 
   // Find minimum number of contributors for 50%+
   let cumulativePercentage = 0;
+  let cumulativeCount = 0;
   let busFactor = 0;
   const contributorsFor50Percent = [];
 
   for (const contributor of sortedContributors) {
-    cumulativePercentage += contributor.percentage;
+    cumulativeCount += contributor.count;
+    cumulativePercentage = (cumulativeCount / totalCommits) * 100;
     busFactor += 1;
     contributorsFor50Percent.push({
       login: contributor.login,
@@ -82,7 +84,7 @@ export function calculateBusFactor(
       cumulativePercentage: Math.round(cumulativePercentage * 10) / 10,
     });
 
-    if (cumulativePercentage >= 50) {
+    if (cumulativeCount * 2 >= totalCommits) {
       break;
     }
   }

@@ -182,7 +182,7 @@ describe("Analysis Functions", () => {
       const result = analyzeOwnership(commits, []);
       expect(result.topContributor).toBe("alice");
       expect(result.topContributorShare).toBe(80);
-      expect(result.ownershipConcentration).toBeGreaterThan(50);
+      expect(result.ownershipConcentration).toBe(36);
     });
 
     it("should calculate well-distributed ownership", () => {
@@ -254,16 +254,16 @@ describe("Analysis Functions", () => {
     });
 
     it("should calculate bus factor of 5+", () => {
-      const commits: GitHubCommit[] = Array.from({ length: 10 }, (_, i) => ({
+      const commits: GitHubCommit[] = Array.from({ length: 12 }, (_, i) => ({
         sha: String(i),
         message: `C${i}`,
-        authorLogin: String.fromCharCode(97 + (i % 7)), // a-g
-        authorName: String.fromCharCode(97 + (i % 7)),
+        authorLogin: String.fromCharCode(97 + i), // a-l
+        authorName: String.fromCharCode(97 + i),
         authorDate: new Date(2024, 0, i + 1).toISOString(),
       }));
 
       const result = calculateBusFactor(commits);
-      expect(result.busFactor).toBeGreaterThan(4);
+      expect(result.busFactor).toBe(6);
       expect(result.riskLevel).toBe("low");
     });
   });

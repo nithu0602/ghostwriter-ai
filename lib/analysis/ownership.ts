@@ -27,7 +27,7 @@ export function analyzeOwnership(
   commits: GitHubCommit[],
   contributors: GitHubContributor[]
 ): OwnershipAnalysisResult {
-  if (commits.length === 0 || contributors.length === 0) {
+  if (commits.length === 0) {
     return {
       topContributor: "unknown",
       topContributorShare: 0,
